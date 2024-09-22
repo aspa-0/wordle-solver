@@ -32,7 +32,7 @@ time.sleep(2)
 
 action = ActionChains(driver)
 
-with open('wordle/answers.txt', 'r') as f:
+with open('wordle-solver/answers.txt', 'r') as f:
     possible_words = f.read()
 
 possible_words = possible_words.replace('"', '').split(',')
@@ -103,8 +103,9 @@ def solve_wordle(possible_words):
     attempts = 1
     current_words = possible_words[:]
     used_guessable_words = False
+    # if you want to use a specific first word you can change it from plate to any other. 
+    # If not make first_word = False to use the default word from the algorithm
     first_word = True
-
 
     while len(current_words) > 0:
         scored_words = [(word, score_words(word, letter_frequencies)) for word in current_words]
@@ -143,10 +144,6 @@ def solve_wordle(possible_words):
 
         print(f'Feedback received: {feedback}')
         print()
-
-        # if feedback == 'GGGGG':
-        #     print(f'Word found: {guess} in {attempts} attempts!')
-        #     return guess
         
         current_words = filter_words(current_words, guess, feedback)
         attempts += 1
@@ -161,10 +158,6 @@ def solve_wordle(possible_words):
             possible_words = possible_words.replace('"', '').split(',')
 
             current_words = filter_words(possible_words, guess, feedback)
-
-    # if len(current_words) == 1:
-    #     print(f'Word found: {current_words[0]} in {attempts} attempts!')
-    #     return current_words[0]
     
     print('No valid words found :(')
     return None
